@@ -1,0 +1,15 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marathon-uurverslag</title>
+<style>body{font-family:-apple-system,system-ui,sans-serif;background:#111;color:#eee;margin:0;padding:24px;display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;min-height:100vh}
+h1{font-size:20px;margin:0;text-align:center}p{margin:0;color:#aaa;text-align:center}audio{width:100%;max-width:520px}
+button{font-size:20px;padding:16px 28px;border:0;border-radius:12px;background:#1f6f43;color:#fff}</style></head><body>
+<h1 id="t">Marathon-uurverslag</h1><p id="s">voorgelezen door Huw</p>
+<audio id="a" controls preload="auto" playsinline></audio>
+<button id="b">▶ Afspelen</button>
+<script>
+const q=new URLSearchParams(location.search);const tag=q.get('t');const a=document.getElementById('a');
+if(tag){a.src='https://github.com/kellzwart-maker/uurverslag-audio/releases/download/'+encodeURIComponent(tag)+'/uurverslag.mp3';document.getElementById('t').textContent='Marathon-uurverslag '+tag.replace('uurverslag-','').replace(/(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})/,'$3-$2-$1 $4:$5');}
+else{document.getElementById('s').textContent='Geen opname gekozen.';}
+document.getElementById('b').onclick=()=>{a.play();document.getElementById('b').style.display='none';};
+a.addEventListener('play',()=>{document.getElementById('b').style.display='none';});
+</script></body></html>
