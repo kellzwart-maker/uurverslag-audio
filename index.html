@@ -2,14 +2,20 @@
 <title>Marathon-uurverslag</title>
 <style>body{font-family:-apple-system,system-ui,sans-serif;background:#111;color:#eee;margin:0;padding:24px;display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;min-height:100vh}
 h1{font-size:20px;margin:0;text-align:center}p{margin:0;color:#aaa;text-align:center}audio{width:100%;max-width:520px}
-button{font-size:20px;padding:16px 28px;border:0;border-radius:12px;background:#1f6f43;color:#fff}</style></head><body>
+button{font-size:20px;padding:16px 28px;border:0;border-radius:12px;background:#1f6f43;color:#fff}ul{list-style:none;padding:0;margin:0;max-width:520px;width:100%}li{padding:10px 0;border-top:1px solid #333}a{color:#8fd4a8}</style></head><body>
 <h1 id="t">Marathon-uurverslag</h1><p id="s">voorgelezen door Huw</p>
 <audio id="a" controls preload="auto" playsinline></audio>
 <button id="b">▶ Afspelen</button>
+<ul id="l"></ul>
 <script>
-const q=new URLSearchParams(location.search);const tag=q.get('t');const f=q.get('f');const a=document.getElementById('a');
-if(f){a.src=f.startsWith('http')?f:('./'+f);document.getElementById('t').textContent='Marathon-uurverslag '+(f.match(/(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})/)||[]).slice(1).reduce((o,v,i)=>o+(i==2?'-'+v+' ':i==3?v+':':i==4?v:v+(i<2?'-':'')),'' ).replace(/^(\d{4})-(\d{2})-(\d{2}) /,'$3-$2-$1 ');}else if(tag){a.src='https://github.com/kellzwart-maker/uurverslag-audio/releases/download/'+encodeURIComponent(tag)+'/uurverslag.mp3';document.getElementById('t').textContent='Marathon-uurverslag '+tag.replace('uurverslag-','').replace(/(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})/,'$3-$2-$1 $4:$5');}
-else{document.getElementById('s').textContent='Geen opname gekozen.';}
+const q=new URLSearchParams(location.search);const a=document.getElementById('a');const T=document.getElementById('t');const S=document.getElementById('s');
+function mooi(n){const m=n.match(/(\d{4})(\d{2})(\d{2})-(\d{2})(\d{2})/);return m?`${m[3]}-${m[2]}-${m[1]} ${m[4]}:${m[5]}`:n;}
+function speel(src,naam){a.src=src;T.textContent='Marathon-uurverslag '+mooi(naam);}
+let f=q.get('f');const tag=q.get('t');
+if(!f&&tag){f='https://github.com/kellzwart-maker/uurverslag-audio/releases/download/'+encodeURIComponent(tag)+'/uurverslag.mp3';}
+if(f){speel(f.startsWith('http')?f:('./'+f),f);}
+else{S.textContent='Laatste opnames:';fetch('episodes/index.json',{cache:'no-store'}).then(r=>r.json()).then(list=>{list.sort().reverse();if(list.length){speel('episodes/'+list[0],list[0]);S.textContent='Nieuwste opname. Oudere:';}
+ const ul=document.getElementById('l');list.slice(1,10).forEach(n=>{const li=document.createElement('li');const x=document.createElement('a');x.href='?f=episodes/'+n;x.textContent=mooi(n);li.appendChild(x);ul.appendChild(li);});}).catch(()=>{S.textContent='Geen opname gevonden.';});}
 document.getElementById('b').onclick=()=>{a.play();document.getElementById('b').style.display='none';};
 a.addEventListener('play',()=>{document.getElementById('b').style.display='none';});
 </script></body></html>
