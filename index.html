@@ -14,7 +14,7 @@ function speel(src,naam){a.src=src;T.textContent='Marathon-uurverslag '+mooi(naa
 let f=q.get('f');const tag=q.get('t');
 if(!f&&tag){f='https://github.com/kellzwart-maker/uurverslag-audio/releases/download/'+encodeURIComponent(tag)+'/uurverslag.mp3';}
 if(f){speel(f.startsWith('http')?f:('./'+f),f);}
-else{S.textContent='Laatste opnames:';fetch('episodes/index.json',{cache:'no-store'}).then(r=>r.json()).then(list=>{list.sort().reverse();if(list.length){speel('episodes/'+list[0],list[0]);S.textContent='Nieuwste opname. Oudere:';}
+else{S.textContent='Laatste opnames:';fetch('https://api.github.com/repos/kellzwart-maker/uurverslag-audio/contents/episodes',{cache:'no-store'}).then(r=>r.json()).then(items=>{const list=items.map(i=>i.name).filter(n=>n.endsWith('.mp3'));list.sort().reverse();if(list.length){speel('episodes/'+list[0],list[0]);S.textContent='Nieuwste opname. Oudere:';}
  const ul=document.getElementById('l');list.slice(1,10).forEach(n=>{const li=document.createElement('li');const x=document.createElement('a');x.href='?f=episodes/'+n;x.textContent=mooi(n);li.appendChild(x);ul.appendChild(li);});}).catch(()=>{S.textContent='Geen opname gevonden.';});}
 document.getElementById('b').onclick=()=>{a.play();document.getElementById('b').style.display='none';};
 a.addEventListener('play',()=>{document.getElementById('b').style.display='none';});
